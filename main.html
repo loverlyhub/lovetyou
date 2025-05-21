@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Love Match</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      overflow: hidden;
+      background: linear-gradient(to right, #ff9a9e, #fad0c4);
+    }
+
+    .hearts {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      transform: rotate(45deg);
+      animation: float 10s linear infinite;
+      opacity: 0.7;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(45deg);
+        opacity: 0;
+      }
+      30% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-10vh) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #fff;
+      margin-top: 100px;
+      text-align: center;
+      text-shadow: 0 0 10px #ff4d6d;
+    }
+
+    .container {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 1.2em;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      width: 280px;
+      margin: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1.2em;
+      margin-top: 20px;
+      background-color: #ff4d6d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ff4d6d;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e0445b;
+    }
+
+    /* Share Popup */
+    #sharePopup {
+      display: none;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #ff4d6d;
+      width: 340px;
+      position: fixed;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 999;
+      font-family: Arial, sans-serif;
+    }
+
+    #sharePopup p#shareText {
+      font-weight: bold;
+      color: #ff4d6d;
+      font-size: 1.2em;
+      margin-bottom: 12px;
+    }
+
+    #matchResultPopup {
+      font-size: 1.3em;
+      color: #ff4d6d;
+      margin-bottom: 20px;
+      font-weight: 600;
+      text-shadow: 0 0 8px #ff4d6d;
+
+      /* Heartbeat animation continuously */
+      opacity: 1;
+      animation: heartbeat 2s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.15);
+        opacity: 0.8;
+      }
+    }
+
+    #sharePopup label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+      color: #ff4d6d;
+    }
+
+    #sharePopup input {
+      width: 100%;
+      padding: 10px;
+      font-size: 1em;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      user-select: all;
+    }
+
+    #sharePopup button, #sharePopup .whatsapp-btn {
+      padding: 8px 20px;
+      background-color: #ff4d6d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 5px 10px 0 10px;
+      font-size: 1em;
+      display: inline-block;
+      text-decoration: none;
+      box-shadow: 0 0 8px #ff4d6d;
+      transition: background-color 0.3s ease;
+    }
+
+    #sharePopup button:hover {
+      background-color: #e0445b;
+    }
+
+    #sharePopup .whatsapp-btn {
+      background-color: #25D366;
+      box-shadow: 0 0 8px #25D366;
+    }
+
+    #sharePopup .whatsapp-btn:hover {
+      background-color: #1ebe57;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Animated Heart Background -->
+  <div class="hearts"></div>
+
+  <script>
+    const heartsContainer = document.querySelector('.hearts');
+    for (let i = 0; i < 40; i++) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (5 + Math.random() * 5) + "s";
+      heart.style.animationDelay = Math.random() * 5 + "s";
+      heart.style.opacity = Math.random();
+      heart.style.transform = `translateY(100vh) rotate(45deg) scale(${Math.random() + 0.5})`;
+      heartsContainer.appendChild(heart);
+    }
+  </script>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h1>💖 Love Match Calculator 💖</h1>
+
+    <input type="text" id="yourName" placeholder="Your name..." />
+    <br />
+    <input type="text" id="crushName" placeholder="Crush's name..." />
+    <br />
+    <button onclick="showLoveMatch()">Check Match</button>
+  </div>
+
+  <!-- Share Popup -->
+  <div id="sharePopup">
+    <p id="shareText">Come see how compatible your love is.</p>
+    
+    <!-- Result shown here under the message -->
+    <div id="matchResultPopup"></div>
+
+    <label for="siteLink">Copy Link:</label>
+    <input id="siteLink" value="" readonly />
+    <button onclick="copyLink()">Copy Link</button>
+
+    <label for="whatsappShare" style="color:#25D366; margin-top: 15px;">Share on WhatsApp:</label>
+    <a href="#" id="whatsappShare" target="_blank" class="whatsapp-btn" rel="noopener noreferrer">
+      WhatsApp Share
+    </a>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    function showLoveMatch() {
+      const yourName = document.getElementById("yourName").value.trim();
+      const crushName = document.getElementById("crushName").value.trim();
+      const sharePopup = document.getElementById("sharePopup");
+      const matchResultPopup = document.getElementById("matchResultPopup");
+
+      if (!yourName || !crushName) {
+        alert("Please enter both names 💌");
+        return;
+      }
+
+      // OPEN ADSTERRA LINK IN NEW TAB (replace the URL below)
+      window.open('https://your-adsterra-ad-link.com', '_blank');
+
+      const first1 = yourName.charAt(0).toUpperCase();
+      const first2 = crushName.charAt(0).toUpperCase();
+
+      let loveScore = 0;
+
+      if ((first1 === 'T' && first2 === 'R') || (first1 === 'R' && first2 === 'T')) {
+        loveScore = 100;
+      } else {
+        const namesCombined = (yourName + crushName).toLowerCase().split('').sort().join('');
+        loveScore = getLovePercentage(namesCombined);
+      }
+
+      let message = `❤️ ${yourName} ❤️ ${crushName} – ${loveScore}% Match! 💘`;
+
+      if (isSinhala(yourName) || isSinhala(crushName)) {
+        message = `💖 ${yourName} ❤️ ${crushName} – ආදරේ ${loveScore}%යි 💖`;
+      }
+
+      matchResultPopup.innerHTML = message;
+
+      const url = window.location.href;
+      document.getElementById("siteLink").value = url;
+
+      const inviteText = "Come see how compatible your love is.";
+      const whatsappMessage = `${message}\n\n${inviteText}\n${url}`;
+      const whatsappLink = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
+      const whatsappBtn = document.getElementById("whatsappShare");
+      whatsappBtn.href = whatsappLink;
+
+      sharePopup.style.display = "block";
+    }
+
+    function getLovePercentage(input) {
+      let hash = 0;
+      for (let i = 0; i < input.length; i++) {
+        hash = input.charCodeAt(i) + ((hash << 5) - hash);
+        hash = hash & hash;
+      }
+      return Math.abs(hash % 51) + 50; // 50–100%
+    }
+
+    function isSinhala(text) {
+      for (let i = 0; i < text.length; i++) {
+        const code = text.charCodeAt(i);
+        if (code >= 3456 && code <= 3583) return true;
+      }
+      return false;
+    }
+
+    function copyLink() {
+      const link = document.getElementById("siteLink");
+      link.select();
+      link.setSelectionRange(0, 99999); // Mobile support
+      document.execCommand("copy");
+      alert("💖 Link copied to clipboard!");
+    }
+  </script>
+
+</body>
+</html>
